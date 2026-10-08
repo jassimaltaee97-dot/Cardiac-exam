@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cardiac CT MCQ Exam</title>
+  <style>
+    :root{--navy:#102235;--blue:#1976d2;--pale:#eef5fb;--line:#cbd9e6;--ok:#16834a;--bad:#c43b3b;--gold:#f2b632}
+    *{box-sizing:border-box} body{margin:0;background:#e9f0f5;color:#182431;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.5}
+    .wrap{max-width:850px;margin:auto;padding:18px}.hero{background:linear-gradient(135deg,var(--navy),#204d72);color:white;padding:24px;border-radius:18px;box-shadow:0 8px 24px #18324a22}
+    h1{margin:0 0 8px;font-size:clamp(25px,5vw,38px)}.hero p{margin:0;color:#dcebf7}.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}.pill{background:#ffffff18;border:1px solid #ffffff40;padding:6px 11px;border-radius:99px}
+    .progressbox{background:white;border-radius:14px;padding:14px;margin:16px 0;position:sticky;top:8px;z-index:3;box-shadow:0 4px 18px #17304718}.bar{height:9px;background:#dfe9f1;border-radius:9px;overflow:hidden}.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),#41a5ff);transition:.25s}.progressrow{display:flex;justify-content:space-between;margin-bottom:8px;font-weight:700}
+    .q{background:white;border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 4px 14px #1730470c}.q h2{font-size:18px;margin:0 0 14px}.num{color:var(--blue)}
+    .opt{display:block;border:1.5px solid var(--line);border-radius:11px;padding:11px 13px;margin:9px 0;cursor:pointer;transition:.15s}.opt:hover{border-color:var(--blue);background:var(--pale)}.opt input{margin-right:9px}.opt.correct{border-color:var(--ok);background:#e9f8ef}.opt.wrong{border-color:var(--bad);background:#fff0f0}
+    .explain{display:none;margin-top:12px;padding:11px 13px;border-radius:10px;background:#f6f8fa;direction:rtl;text-align:right}.explain.show{display:block}.controls{display:flex;gap:10px;justify-content:center;margin:22px 0 8px}button{border:0;border-radius:11px;padding:13px 20px;font-weight:800;font-size:16px;cursor:pointer}#submit{background:var(--blue);color:white}#reset{background:#dfe7ed;color:#263746}.result{display:none;background:var(--navy);color:white;border-radius:16px;padding:22px;text-align:center;margin:18px 0}.result.show{display:block}.score{font-size:34px;font-weight:900;color:#ffd56c}.note{font-size:13px;color:#607284;text-align:center;margin:18px}
+    @media(max-width:520px){.wrap{padding:10px}.q{padding:16px}.progressbox{top:4px}}
+  </style>
+</head>
+<body><main class="wrap">
+  <section class="hero"><h1>Cardiac CT — MCQ Exam</h1><p>High-yield questions based only on the supplied pages.</p><div class="meta"><span class="pill">15 Questions</span><span class="pill">Single Best Answer</span><span class="pill">Instant Explanations</span></div></section>
+  <div class="progressbox"><div class="progressrow"><span>Progress</span><span id="count">0 / 15</span></div><div class="bar"><span id="bar"></span></div></div>
+  <form id="quiz"></form>
+  <div class="controls"><button id="submit" type="button">Submit exam</button><button id="reset" type="button">Try again</button></div>
+  <section class="result" id="result"><div>Your score</div><div class="score" id="score"></div><div id="message"></div></section>
+  <p class="note">Educational revision material based on the text provided in the images.</p>
+</main>
+<script>
+const qs=[
+ {q:'What temporal resolution is highlighted for modern cardiac CT?',o:['< 75 ms','< 150 ms','0.5 ms','5 ms'],a:0,e:'الدقة الزمنية المذكورة أقل من 75 ms، وتساعد على تقليل تشوش حركة القلب.'},
+ {q:'What spatial resolution is highlighted for cardiac CT?',o:['5 mm','1.5 mm','0.5 mm','0.05 mm'],a:2,e:'الدقة المكانية المذكورة هي 0.5 mm، ما يسمح بإظهار تفاصيل الشرايين التاجية.'},
+ {q:'Which technique helps cardiac CT acquire “still” images of the moving heart?',o:['ECG gating','Ultrasound gating','Respiratory spirometry only','Non-contrast imaging'],a:0,e:'ECG-gating يزامن التقاط البيانات مع مرحلة مناسبة من الدورة القلبية لتقليل motion artefact.'},
+ {q:'How long should caffeine be avoided before cardiac CT according to the text?',o:['2 hours','6 hours','12 hours','24 hours'],a:3,e:'يُنصح بتجنب الكافيين لمدة 24 ساعة قبل الفحص.'},
+ {q:'Which group should be avoided as a source of caffeine before the scan?',o:['Tea, coffee, and caffeine-containing soft drinks','Milk, water, and fruit juice','Bread, rice, and pasta','Eggs, cheese, and yoghurt'],a:0,e:'النص يذكر الشاي والقهوة والمشروبات الغازية المحتوية على الكافيين.'},
+ {q:'What is the ideal heart-rate range for optimal cardiac CT imaging?',o:['35–40 beats/min','45–50 beats/min','55–60 beats/min','75–90 beats/min'],a:2,e:'المعدل المثالي المذكور هو 55–60 ضربة/دقيقة لتحسين الصورة والمساعدة في خفض الجرعة.'},
+ {q:'Which beta-blocker is commonly used for heart-rate control before cardiac CT?',o:['Propranolol only','Metoprolol','Atenolol only','Carvedilol'],a:1,e:'Metoprolol هو الدواء المذكور، ويمكن إعطاؤه فمويًا أو وريديًا أو بالطريقتين.'},
+ {q:'How may metoprolol be administered for cardiac CT preparation?',o:['Orally only','Intramuscularly only','Intravenously only','Orally, intravenously, or in combination'],a:3,e:'النص يذكر الإعطاء الفموي أو الوريدي أو الجمع بينهما.'},
+ {q:'Which medications should patients be assessed for before cardiac CT?',o:['Antibiotics and antihistamines','Beta-blockers and sublingual nitrates','Diuretics and insulin','Anticoagulants and steroids'],a:1,e:'يجب تقييم ملاءمة المريض لإعطاء beta-blockers وsublingual nitrates.'},
+ {q:'What is the stated sublingual GTN dose before cardiac CT?',o:['40–80 µg','100–200 µg','400–800 µg','1,200–1,600 µg'],a:2,e:'الجرعة المذكورة 400–800 micrograms تحت اللسان.'},
+ {q:'The stated GTN dose usually corresponds to how many tablets?',o:['1–2 tablets','3–4 tablets','5–6 tablets','One half-tablet only'],a:0,e:'400–800 µg تعادل 1–2 قرص حسب النص.'},
+ {q:'Why is sublingual GTN administered before coronary CT?',o:['To constrict coronary arteries','To produce coronary dilatation and improve image quality','To increase heart rate markedly','To prevent contrast excretion'],a:1,e:'GTN يوسّع الشرايين التاجية، فيُحسن رؤيتها وجودة الصورة.'},
+ {q:'When should GTN preferably be given relative to scan acquisition?',o:['Immediately after the scan','90–120 seconds before acquisition','30 minutes after contrast','24 hours before acquisition'],a:1,e:'ذُكر إعطاؤه قبل الالتقاط بـ90–120 ثانية لتقليل أثر الارتفاع العابر في النبض وقت التصوير.'},
+ {q:'Which is a contraindication to nitrate administration?',o:['Mild controlled hypertension','Severe aortic stenosis','Stable normal haemoglobin','Resting heart rate of 60/min'],a:1,e:'من موانع النترات المذكورة severe aortic stenosis، وكذلك hypotension وhypovolaemia وغيرها.'},
+ {q:'Which medication history is particularly important before giving GTN?',o:['Recent Viagra-type medication','Recent paracetamol use','Oral iron therapy','Vitamin D supplementation'],a:0,e:'استعمال أدوية شبيهة Viagra حديثًا من موانع إعطاء النترات بسبب خطر الانخفاض الشديد في الضغط.'}
+];
+const form=document.getElementById('quiz');
+qs.forEach((x,i)=>{const s=document.createElement('section');s.className='q';s.innerHTML=`<h2><span class="num">Q${i+1}.</span> ${x.q}</h2>`+x.o.map((v,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"><b>${String.fromCharCode(65+j)}.</b> ${v}</label>`).join('')+`<div class="explain" id="e${i}">${x.e}</div>`;form.appendChild(s)});
+function progress(){const n=new Set([...document.querySelectorAll('input:checked')].map(x=>x.name)).size;document.getElementById('count').textContent=`${n} / ${qs.length}`;document.getElementById('bar').style.width=`${n/qs.length*100}%`}
+form.addEventListener('change',progress);
+document.getElementById('submit').onclick=()=>{let score=0;qs.forEach((x,i)=>{const chosen=document.querySelector(`input[name=q${i}]:checked`);const labels=[...document.querySelectorAll(`input[name=q${i}]`)].map(a=>a.closest('label'));labels.forEach(z=>z.classList.remove('correct','wrong'));labels[x.a].classList.add('correct');if(chosen){if(+chosen.value===x.a)score++;else chosen.closest('label').classList.add('wrong')}document.getElementById(`e${i}`).classList.add('show')});const pct=Math.round(score/qs.length*100);document.getElementById('score').textContent=`${score} / ${qs.length} (${pct}%)`;document.getElementById('message').textContent=pct>=80?'Excellent — strong command of the high-yield points.':pct>=60?'Good — review the explanations for missed points.':'Review the key values and medication details, then try again.';document.getElementById('result').classList.add('show');document.getElementById('result').scrollIntoView({behavior:'smooth',block:'center'})};
+document.getElementById('reset').onclick=()=>{form.reset();document.querySelectorAll('.opt').forEach(x=>x.classList.remove('correct','wrong'));document.querySelectorAll('.explain').forEach(x=>x.classList.remove('show'));document.getElementById('result').classList.remove('show');progress();scrollTo({top:0,behavior:'smooth'})};
+</script></body></html>
